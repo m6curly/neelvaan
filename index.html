@@ -1,0 +1,391 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#202825" name="theme-color"/>
+<meta content="Explore OpenStreetMap history, raster change detection and Landsat temperature analysis in the NEELVAAN spatial intelligence workspace." name="description"/>
+<title>NEELVAAN | Spatial Intelligence Platform</title>
+<link crossorigin="" href="https://cdn.jsdelivr.net" rel="preconnect"/>
+<link href="https://server.arcgisonline.com" rel="preconnect" crossorigin="anonymous"/>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="vaanam-theme.css" rel="stylesheet"/>
+<link href="workspace-tools.css" rel="stylesheet"/><link href="workspace-ui.css" rel="stylesheet"/><link href="workspace-polish.css" rel="stylesheet"/><link href="site-final.css" rel="stylesheet"/></head>
+<body data-workspace="vaanam-workspace">
+<header class="topbar">
+  <a aria-label="NEELVAAN home" class="workspace-brand" href="index.html">
+    <span class="vaanam-brand-symbol" aria-hidden="true">
+      <span class="vaanam-earth-sphere">
+        <span class="vaanam-earth-texture"><span class="vaanam-earth-spin"></span></span>
+        <span class="vaanam-earth-shading"></span>
+      </span>
+    </span>
+    <b>NEELVAAN</b>
+  </a>
+  <form class="header-place-search" id="placeSearchForm" role="search">
+    <span aria-hidden="true">⌕</span>
+    <input aria-label="Search for a place or coordinates, then press Enter" autocomplete="off" enterkeyhint="search" id="placeSearchInput" placeholder="Search places or coordinates…" type="search"/>
+  </form>
+  <div class="google-login-wrap">
+    <button aria-label="Login with Google" class="google-login-button" id="googleLoginBtn" title="Sign in with your Google account and authorize NEELVAAN Drive access" type="button">
+      <span class="google-g" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#4285F4" d="M43.6 24.5c0-1.3-.1-2.6-.3-3.8H24v7.2h11c-.5 2.3-1.8 4.2-3.8 5.5l6.1 4.7c3.6-3.3 5.3-8.1 5.3-13.6z"/><path fill="#34A853" d="M24 44c5.4 0 9.9-1.8 13.2-4.9l-6.1-4.7c-1.7 1.1-3.9 1.8-7.1 1.8-5.4 0-10-3.7-11.7-8.6l-6.3 4.9C9.4 39.3 16.1 44 24 44z"/><path fill="#FBBC05" d="M12.3 27.6a12 12 0 0 1 0-7.2L6 15.5a20 20 0 0 0 0 17z"/><path fill="#EA4335" d="M24 11.8c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 5.8 29.4 4 24 4 16.1 4 9.4 8.7 6 15.5l6.3 4.9c1.7-4.9 6.3-8.6 11.7-8.6z"/></svg></span>
+      <span>Login with Google</span>
+    </button>
+    <span aria-live="polite" class="google-login-status" id="googleLoginStatus" hidden></span>
+  </div>
+</header>
+<nav aria-label="NEELVAAN workspace tools" class="workspace-menubar">
+  <div class="workspace-menubar-inner">
+    <div class="workspace-menu-primary">
+      <button class="workspace-menu-action" data-open-panel="addData" type="button" aria-label="Open Add Data">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg><span>Add Data</span>
+      </button>
+      <button class="workspace-menu-action" data-open-panel="basemap" type="button" aria-label="Open Base Map">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 7 6-3 6 3 6-3v13l-6 3-6-3-6 3V7Z"/><path d="M9 4v13M15 7v13"/></svg><span>Base Map</span>
+      </button>
+      <div class="analysis-menu-wrap">
+        <button aria-controls="analysisMenu" aria-expanded="false" aria-haspopup="true" class="workspace-menu-action analysis-menu-trigger" id="analysisMenuBtn" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 5-7"/><path d="M16 6h3v3"/></svg><span>Analysis</span><svg aria-hidden="true" class="menu-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div aria-label="Analysis tools" class="analysis-dropdown" hidden id="analysisMenu" role="menu">
+          <div class="analysis-dropdown-heading">ANALYSIS TOOLS</div>
+          <button data-analysis-panel="osm" role="menuitem" type="button"><span class="analysis-menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/><path d="M7 3 5 5M17 3l2 2"/></svg></span><span class="analysis-menu-copy"><b>OSM History</b><small>Historical versions and changes</small></span><span class="analysis-menu-arrow">↗</span></button>
+          <button data-analysis-panel="change" role="menuitem" type="button"><span class="analysis-menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h13M13 3l4 4-4 4M20 17H7m4-4-4 4 4 4"/></svg></span><span class="analysis-menu-copy"><b>Change Detection</b><small>Compare raster datasets</small></span><span class="analysis-menu-arrow">↗</span></button>
+          <button data-analysis-panel="lst" role="menuitem" type="button"><span class="analysis-menu-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 14.7V5a3 3 0 0 0-6 0v9.7a5 5 0 1 0 6 0Z"/><path d="M11 11v7"/><path d="M17 7h3M17 11h2"/></svg></span><span class="analysis-menu-copy"><b>LST</b><small>Land Surface Temperature · Landsat</small></span><span class="analysis-menu-arrow">↗</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="app-shell">
+
+<aside aria-label="Workspace panel" class="left-panel" id="leftPanel">
+<section class="panel-view" id="layersPanel">
+<div class="workspace-layer-section layers-only-section">
+<div class="workspace-section-heading map-content-heading"><div><h2>Map Content</h2></div><div class="map-content-heading-actions"><button aria-label="Collapse Map Content" aria-expanded="true" class="map-content-collapse" id="mapContentCollapseBtn" title="Collapse Map Content" type="button">‹</button></div></div>
+<div class="workspace-layers-list" id="workspaceLayersList"><div class="workspace-layer-empty">Analysis results and map drawings will appear here.</div></div>
+</div>
+</section>
+<section class="panel-view" hidden="" id="osmPanel">
+<div class="tool-panel-heading"><span class="section-kicker">OPENSTREETMAP</span><h2>OSM HISTORY</h2><p>Load a Way, Node, Relation or Changeset and explore its historical versions.</p></div>
+<div class="tool-card osm-lookup-card">
+<div aria-label="OpenStreetMap history lookup" class="header-object-search">
+<select aria-label="OSM object type" id="objectSearchType"><option value="way">Way</option><option value="node">Node</option><option value="relation">Relation</option><option value="changeset">Changeset</option></select>
+<input aria-label="OSM object ID" id="objectSearchId" inputmode="numeric" pattern="[0-9]+" placeholder="OSM object ID" type="search"/>
+<button id="objectSearchBtn" type="button">Load history</button>
+<input accept=".xml,.osm,application/xml,text/xml" data-max-size="31457280" hidden="" id="xmlFile" type="file"/>
+<button class="osm-import-button" id="osmImportBtn" type="button">Import OSM XML</button>
+</div>
+</div>
+<div class="history-timeline-section">
+<div class="workspace-section-heading"><div><span class="section-kicker">VERSION HISTORY</span><h2>Version timeline</h2></div></div>
+<div class="empty-state" id="layersEmpty">
+<div class="empty-icon">⇧</div>
+<h2>No OSM history loaded</h2>
+<p>Load a Way, Node or Relation by ID, or import an OSM history XML. Historical versions will appear here.</p>
+</div>
+<div hidden="" id="layerControls">
+<div class="layer-actions"><button class="text-button" id="showAllBtn">Show all</button><span>·</span><button class="text-button" id="hideAllBtn">Hide all</button><button aria-label="Show or hide points" aria-pressed="true" class="points-inline active" id="pointsBtn" title="Hide points">● Nodes</button></div>
+<label class="search-box"><span aria-hidden="true">⌕</span><input aria-label="Search versions" id="yearSearch" placeholder="Find a year or version" type="search"/></label>
+<div class="layer-list-head"><span>VERSIONS</span><span id="layerCount">0</span></div>
+<div class="year-groups" id="yearGroups"></div>
+<div class="layer-legend"><span><i class="legend-swatch historical"></i> Historical version</span><span><i class="legend-swatch selected"></i> Selected version</span></div>
+</div>
+</div>
+<div class="tool-card osm-analysis-summary" aria-live="polite">
+<div class="empty-state compact" id="analysisEmpty"><h2>History analysis</h2><p>Load OSM history to view version counts, dates and geometry details.</p></div>
+<div id="analysisContent" hidden=""></div>
+</div>
+<aside aria-label="OSM History inspector" class="osm-inspector-panel" id="rightPanel">
+<div class="panel-heading"><div><p class="eyebrow">OSM HISTORY</p><h2 id="rightTitle">Inspector</h2></div></div>
+<div class="right-inspector-controls">
+<div class="jump-version-control"><label for="detailVersionSelect">JUMP TO ANOTHER VERSION</label><select aria-label="Jump to another version" class="version-picker" id="detailVersionSelect"><option value="">Select a version…</option></select></div>
+<div class="selected-layer-indicator" id="selectedLayerIndicator"><span class="eyebrow">SELECTED VERSION</span><strong id="selectedLayerLabel">No version selected</strong><small id="selectedLayerMeta">Load OSM History and select a version</small></div>
+</div>
+<div class="right-content" id="rightContent"><div class="empty-state compact"><h2>Nothing selected yet</h2><p>Load OSM history and select a version in the timeline.</p></div></div>
+</aside>
+</section>
+<section class="panel-view" hidden="" id="basemapPanel">
+<div class="detail-card basemap-card">
+<h3>Choose a basemap</h3>
+<p class="fine-print">Switch the map background at any time. Historical object layers stay in place. The active provider's tile attribution appears in the map corner.</p>
+<div aria-label="Basemap gallery" class="basemap-options" id="basemapOptions"></div>
+<p class="fine-print">Need the dedicated English map for Asia? <a href="https://www.osmap.asia/" rel="noopener noreferrer" target="_blank">Open osMap Asia ↗</a>.</p>
+<p class="fine-print basemap-notice">Public basemaps have separate attribution, commercial-use and fair-use rules, and availability can change. The English-label demo tile service is for trying the style; use the provider’s own key/terms for sustained or high-volume use.</p>
+</div>
+</section>
+
+<section class="panel-view" hidden="" id="changePanel"><div class="tool-panel-heading"><span class="section-kicker">RASTER ANALYSIS</span><h2>Change detection</h2><p>Compare two matching GeoTIFF rasters. Processing runs in this browser.</p></div><div class="tool-card change-inputs"><div class="raster-panel-content">
+<section class="raster-section">
+<h3>01 · Before image</h3>
+<label class="raster-label" for="change-beforeFile">Earlier raster (GeoTIFF)</label>
+<input accept=".tif,.tiff,image/tiff" class="raster-file" id="change-beforeFile" type="file"/>
+<div class="raster-file-meta" id="change-beforeFileMeta">No file selected</div>
+<label class="raster-label" for="change-beforeDate">Earlier observation date <span>(optional)</span></label>
+<input class="raster-input" id="change-beforeDate" type="date"/>
+</section>
+<section class="raster-section">
+<h3>02 · After image</h3>
+<label class="raster-label" for="change-afterFile">Later raster (GeoTIFF)</label>
+<input accept=".tif,.tiff,image/tiff" class="raster-file" id="change-afterFile" type="file"/>
+<div class="raster-file-meta" id="change-afterFileMeta">No file selected</div>
+<label class="raster-label" for="change-afterDate">Later observation date <span>(optional)</span></label>
+<input class="raster-input" id="change-afterDate" type="date"/>
+</section>
+<section class="raster-section">
+<h3>03 · Analysis settings</h3>
+<div class="raster-grid-2">
+<div>
+<label class="raster-label" for="change-changeThreshold">Change threshold</label>
+<input class="raster-input" id="change-changeThreshold" min="0" step="any" type="number" value="0.10"/>
+</div>
+<div>
+<label class="raster-label" for="change-changeUnits">Raster units</label>
+<input class="raster-input" id="change-changeUnits" maxlength="18" placeholder="e.g. NDVI" type="text" value="input units"/>
+</div>
+</div>
+<p>Differences within ± threshold are classed as no significant change. Enter the threshold in the same units as the raster values.</p>
+</section>
+<div class="raster-note warning">
+          Both rasters must have the same CRS, extent, pixel size, width and height. Align/resample them first in QGIS if they differ. Large GeoTIFFs are read and compared in 128-row tiles; there is no fixed 12-million-pixel or 500 MB upload cap. Cloud and shadow masking must already be applied to both inputs; this tool uses GeoTIFF NoData values only. Browser memory and the classic TIFF 4 GB export format remain practical limits.
+        </div>
+<div class="raster-run-actions">
+<button class="raster-button primary" disabled="" id="change-runChangeBtn" type="button">Run change detection</button>
+<p aria-live="polite" id="change-changeRunStatus">Select both rasters to begin.</p>
+</div>
+</div></div><details class="tool-results" id="change-changeResultsDetails"><summary>Analysis results</summary><div class="tool-results-body"><div class="tool-result-heading">
+<p class="raster-kicker">RESULTS &amp; EXPORT</p>
+<h2>Change summary</h2>
+<p id="change-resultDateLabel">No analysis has been run yet.</p>
+</div><div class="raster-map-top">
+<div class="raster-map-chip"><strong id="change-mapTitle">Change detection layer</strong><small id="change-mapSubtitle">The result will be added to the shared map and layer list.</small></div>
+</div><div class="raster-map-empty" id="change-mapEmpty">
+<div><span class="raster-empty-icon">⇄</span><b>Ready for comparison</b><p>Load a before and after GeoTIFF, then run the analysis to see increased, decreased and stable pixels.</p></div>
+</div><div class="raster-map-legend" hidden="" id="change-mapLegend">
+<strong>Change classes</strong>
+<div class="raster-legend-items">
+<span><i class="change-key-decrease"></i> Decrease</span>
+<span><i class="change-key-stable"></i> Within threshold</span>
+<span><i class="change-key-increase"></i> Increase</span>
+</div>
+</div><div class="raster-results-content" id="changeResults">
+<div class="raster-empty-results">
+<span class="raster-empty-icon">◫</span>
+<strong>Results will appear here</strong>
+<p>Analysis runs locally in your browser. Export the result to keep a copy.</p>
+</div>
+</div></div></details></section><section class="panel-view" hidden="" id="lstPanel"><div class="tool-panel-heading"><span class="section-kicker">THERMAL REMOTE SENSING</span><h2>Land surface temperature</h2><p>Calculate Landsat 8/9 Collection 2 Level-2 surface temperature from GeoTIFF bands.</p></div><div class="tool-card lst-inputs"><div class="raster-panel-content">
+<section class="raster-section">
+<h3>01 · Surface temperature band</h3>
+<label class="raster-label" for="lst-stFile">Landsat 8/9 ST_B10 GeoTIFF</label>
+<input accept=".tif,.tiff,image/tiff" class="raster-file" id="lst-stFile" type="file"/>
+<div class="raster-file-meta" id="lst-stFileMeta">No file selected</div>
+<p>Choose the native Collection 2 Level-2 <b>ST_B10</b> file with raw DN values. Do not pre-apply its scale factor, or select a true-colour / browse image.</p>
+</section>
+<section class="raster-section">
+<h3>02 · Quality masks</h3>
+<label class="raster-label" for="lst-qaFile">QA_PIXEL GeoTIFF <span>(recommended)</span></label>
+<input accept=".tif,.tiff,image/tiff" class="raster-file" id="lst-qaFile" type="file"/>
+<div class="raster-file-meta" id="lst-qaFileMeta">No QA_PIXEL file selected</div>
+<label class="raster-check"><input id="lst-excludeWater" type="checkbox"/> Exclude water pixels too</label>
+<label class="raster-label" for="lst-stQaFile">ST_QA uncertainty GeoTIFF <span>(optional)</span></label>
+<input accept=".tif,.tiff,image/tiff" class="raster-file" id="lst-stQaFile" type="file"/>
+<div class="raster-file-meta" id="lst-stQaFileMeta">No ST_QA file selected</div>
+<div class="raster-grid-2">
+<div>
+<label class="raster-label" for="lst-maxUncertainty">Max uncertainty (K)</label>
+<input class="raster-input" id="lst-maxUncertainty" min="0" step="0.1" type="number" value="2.0"/>
+</div>
+<div>
+<label class="raster-label" for="lst-lstDate">Observation date</label>
+<input class="raster-input" id="lst-lstDate" type="date"/>
+</div>
+</div>
+<p>QA_PIXEL masks fill, dilated cloud, cirrus, cloud, cloud shadow and snow. ST_QA is read with its 0.01 K scale when supplied. Large scenes are read and processed in 128-row tiles without a fixed pixel-count or 500 MB upload cap; actual limits depend on browser/device memory and available storage.</p>
+</section>
+<div class="raster-note warning" id="lst-lstMaskWarning">
+          For a defensible result, upload the matching QA_PIXEL file. Without it, the calculation cannot identify cloud, shadow or snow pixels and the output will be marked unmasked.
+        </div>
+<div class="raster-run-actions">
+<button class="raster-button primary" disabled="" id="lst-runLstBtn" type="button">Calculate LST</button>
+<p aria-live="polite" id="lst-lstRunStatus">Select the ST_B10 raster to begin.</p>
+</div>
+</div></div><details class="tool-results" id="lst-lstResultsDetails"><summary>Temperature results</summary><div class="tool-results-body"><div class="tool-result-heading">
+<p class="raster-kicker">RESULTS &amp; EXPORT</p>
+<h2>Temperature summary</h2>
+<p id="lst-resultDateLabel">No calculation has been run yet.</p>
+</div><div class="raster-map-top">
+<div class="raster-map-chip"><strong id="lst-mapTitle">Land surface temperature layer</strong><small id="lst-mapSubtitle">The temperature layer will be added to the shared map and layer list.</small></div>
+</div><div class="raster-map-empty" id="lst-mapEmpty">
+<div><span class="raster-empty-icon">☼</span><b>Ready for thermal analysis</b><p>Load a Landsat ST_B10 band. Add QA_PIXEL and ST_QA files to remove poor-quality observations before calculating temperatures.</p></div>
+</div><div class="raster-map-legend" hidden="" id="lst-mapLegend">
+<strong>Land surface temperature · °C</strong>
+<div aria-hidden="true" class="raster-temperature-gradient"></div>
+<div class="raster-legend-items raster-legend-items-spread"><span id="lst-legendMin">Low</span><span id="lst-legendMax">High</span></div>
+</div><div class="raster-results-content" id="lstResults">
+<div class="raster-empty-results">
+<span class="raster-empty-icon">◫</span>
+<strong>Results will appear here</strong>
+<p>Analysis runs locally in your browser. Export the result to keep a copy.</p>
+</div>
+</div></div></details></section></aside>
+<div aria-label="Resize Map Content panel" class="sidebar-resizer" id="sidebarResizer" role="separator" aria-orientation="vertical" aria-valuemin="210" aria-valuemax="520" aria-valuenow="290" tabindex="0" title="Drag to resize Map Content"></div>
+<section aria-label="Map workspace" class="map-area">
+<div aria-label="Map editing tools" class="map-drawing-toolbar" role="toolbar">
+  <button aria-label="Select features" aria-pressed="false" class="map-draw-tool" data-tooltip="Select" id="arrowToolBtn" title="Select features" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3.5 5.2 20l4.1-4.1 2.6 5.2 2.1-1-2.6-5.1 6-.3L5 3.5Z" fill="currentColor" stroke="currentColor" stroke-width=".8" stroke-linejoin="round"/></svg></button>
+  <button aria-label="Pan map" aria-pressed="true" class="map-draw-tool" data-tooltip="Pan" id="panToolBtn" title="Pan map" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 11V5a2 2 0 0 1 4 0v5-7a2 2 0 0 1 4 0v8-5a2 2 0 0 1 4 0v9c0 4-2 7-6 7h-2c-2 0-3-1-4-2l-4-5a2 2 0 0 1 3-3l2 2Z"/></svg></button>
+  <span aria-hidden="true" class="map-tool-divider"></span>
+  <button aria-label="Add point" aria-pressed="false" class="map-draw-tool" data-tooltip="Point" id="addPlaceMarkBtn" title="Add point" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></button>
+  <button aria-label="Draw line" aria-pressed="false" class="map-draw-tool" data-tooltip="Line" id="addPathBtn" title="Draw line" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 18 9 6l6 9 5-6"></path><circle cx="4" cy="18" r="1.7"></circle><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="15" r="1.7"></circle><circle cx="20" cy="9" r="1.7"></circle></svg></button>
+  <button aria-label="Draw polygon" aria-pressed="false" class="map-draw-tool" data-tooltip="Polygon" id="addPolygonBtn" title="Draw polygon" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 8 6-3 11H6L4 9l8-6Z"></path></svg></button>
+  <button aria-label="Measure distance and area" aria-pressed="false" class="map-draw-tool" data-tooltip="Measure" id="measureToolBtn" title="Measure distance and area" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 17 13-13 3 3L7 20H4v-3Z"/><path d="m13 8 3 3M10 11l2 2M7 14l2 2"/></svg></button>
+  <span class="drawing-status" hidden id="drawingStatus" aria-live="polite">Click on the map to add points.</span>
+  <button class="map-draw-action" hidden id="finishDrawingBtn" type="button">Finish</button>
+  <button aria-label="Cancel drawing" class="map-draw-cancel" hidden id="cancelDrawingBtn" title="Cancel drawing" type="button">×</button>
+</div>
+<div aria-label="Shared NEELVAAN map showing OSM history and raster analysis layers" id="map" role="application"></div>
+<div aria-label="Map zoom controls" class="map-tools">
+  <button aria-label="Zoom in" class="map-tool" id="zoomInBtn" title="Zoom in" type="button">＋</button>
+  <button aria-label="Zoom out" class="map-tool" id="zoomOutBtn" title="Zoom out" type="button">−</button>
+</div>
+<footer class="map-footer" aria-label="Map status, scale and active map attribution">
+  <div class="map-footer-left">
+    <div class="map-footer-brand">© 2026 NEELVAAN <span class="footer-separator">·</span> <a href="legal.html#data">Data sources</a></div>
+    <div class="map-provider-attribution" id="mapAttributionSlot" aria-label="Active map provider attribution"></div>
+  </div>
+  <div class="map-footer-metrics">
+    <div class="map-footer-scale" id="mapScaleSlot" aria-label="Map scale"></div>
+    <div class="map-footer-metric"><span>Camera</span><strong id="footerCamera" title="Approximate camera height estimated from map scale and viewport">—</strong></div>
+    <div class="map-footer-metric"><span>Lat</span><strong id="footerLatitude">—</strong></div>
+    <div class="map-footer-metric"><span>Long</span><strong id="footerLongitude">—</strong></div>
+    <div class="map-footer-metric"><span>Elevation</span><strong id="footerElevation" title="Approximate terrain elevation from Copernicus DEM GLO-90, about 90 m resolution">— m</strong></div>
+  </div>
+</footer>
+<div aria-hidden="true" aria-labelledby="placeMarkDialogTitle" class="place-mark-dialog" hidden id="placeMarkDialog" role="dialog" aria-modal="true">
+  <button aria-label="Close place details" class="place-mark-backdrop" data-place-dialog-close="true" type="button"></button>
+  <section class="place-mark-window" role="document">
+    <header class="place-mark-header">
+      <div><span class="section-kicker">MAP FEATURE</span><h2 id="placeMarkDialogTitle">Add place mark</h2><p id="placeMarkDialogHint">Save a named place at the selected map location.</p></div>
+      <button aria-label="Close dialog" class="place-mark-close" data-place-dialog-close="true" type="button">×</button>
+    </header>
+    <form id="placeMarkForm" class="place-mark-form">
+      <label class="place-field"><span>Layer name</span><select id="placeMarkLayerSelect" aria-label="Choose an existing layer or create a new layer"><option value="__new__">Create new layer…</option></select></label>
+      <label class="place-field" id="placeMarkNewLayerWrap"><span>New layer name</span><input id="placeMarkLayerName" maxlength="100" required placeholder="e.g. Flood Survey" autocomplete="off"/></label>
+      <label class="place-field"><span>Place name</span><input id="placeMarkName" maxlength="80" required placeholder="e.g. India Gate" autocomplete="off"/></label>
+      <label class="place-field"><span>Description <small>Optional</small></span><textarea id="placeMarkDescription" rows="3" maxlength="500" placeholder="Add a short note about this place…"></textarea></label>
+      <fieldset class="place-icon-field"><legend>Choose an icon</legend><div aria-label="Available place icons" class="place-icon-grid" id="placeMarkIconPicker"></div></fieldset>
+      <div class="place-coordinate-heading"><strong>Coordinates</strong><span>Change these values to move the marker</span></div>
+      <div class="place-coordinate-grid">
+        <label class="place-field"><span>Latitude</span><input id="placeMarkLatitude" type="number" step="any" min="-90" max="90" required inputmode="decimal"/></label>
+        <label class="place-field"><span>Longitude</span><input id="placeMarkLongitude" type="number" step="any" min="-180" max="180" required inputmode="decimal"/></label>
+      </div>
+      <div class="place-mark-form-error" id="placeMarkFormError" role="alert" hidden></div>
+      <footer class="place-mark-actions"><button class="place-cancel-button" data-place-dialog-close="true" type="button">Cancel</button><button class="place-save-button" id="savePlaceMarkBtn" type="submit">Save place</button></footer>
+    </form>
+  </section>
+</div>
+<div aria-hidden="true" aria-labelledby="layerEditDialogTitle" class="place-mark-dialog" hidden id="layerEditDialog" role="dialog" aria-modal="true">
+  <button aria-label="Close layer editor" class="place-mark-backdrop" data-layer-dialog-close="true" type="button"></button>
+  <section class="place-mark-window layer-edit-window" role="document">
+    <header class="place-mark-header">
+      <div><span class="section-kicker">MAP CONTENT</span><h2 id="layerEditDialogTitle">Edit layer</h2><p>Update the layer name and display opacity.</p></div>
+      <button aria-label="Close dialog" class="place-mark-close" data-layer-dialog-close="true" type="button">×</button>
+    </header>
+    <form id="layerEditForm" class="place-mark-form">
+      <label class="place-field" id="layerEditNameField"><span>Layer name</span><input id="layerEditName" maxlength="100" required autocomplete="off"/></label>
+      <label class="place-field" id="layerEditOpacityField"><span>Opacity <strong id="layerEditOpacityValue">100%</strong></span><input id="layerEditOpacity" type="range" min="0" max="100" step="1" value="100"/></label>
+      <div class="place-mark-form-error" id="layerEditFormError" role="alert" hidden></div>
+      <footer class="place-mark-actions"><button class="place-cancel-button" data-layer-dialog-close="true" type="button">Cancel</button><button class="place-save-button" type="submit">Save changes</button></footer>
+    </form>
+  </section>
+</div>
+<div aria-hidden="true" aria-labelledby="geometryDialogTitle" class="place-mark-dialog" hidden id="geometryDialog" role="dialog" aria-modal="true">
+  <button aria-label="Close drawing details" class="place-mark-backdrop" data-geometry-dialog-close="true" type="button"></button>
+  <section class="place-mark-window geometry-dialog-window" role="document">
+    <header class="place-mark-header">
+      <div><span class="section-kicker">MAP DRAWING</span><h2 id="geometryDialogTitle">Save drawing</h2><p id="geometryDialogHint">Choose a layer and add details for this map feature.</p></div>
+      <button aria-label="Close dialog" class="place-mark-close" data-geometry-dialog-close="true" type="button">×</button>
+    </header>
+    <form class="place-mark-form" id="geometryForm">
+      <label class="place-field"><span>Layer</span><select id="geometryLayerSelect" aria-label="Choose an existing drawing layer or create a new layer"><option value="__new__">Create new layer…</option></select></label>
+      <label class="place-field" id="geometryNewLayerWrap"><span>New layer name</span><input id="geometryLayerName" maxlength="100" required value="Drawings" autocomplete="off"/></label>
+      <label class="place-field"><span>Feature name</span><input id="geometryFeatureName" maxlength="100" required placeholder="e.g. Survey boundary" autocomplete="off"/></label>
+      <label class="place-field"><span>Description <small>Optional</small></span><textarea id="geometryDescription" rows="2" maxlength="500" placeholder="Add a short note about this drawing…"></textarea></label>
+      <label class="place-field geometry-color-field"><span>Line / outline colour</span><input id="geometryColor" type="color" value="#d9b08c"/></label>
+      <div class="geometry-metrics" id="geometryMetrics" aria-live="polite"></div>
+      <div class="place-mark-form-error" id="geometryFormError" role="alert" hidden></div>
+      <footer class="place-mark-actions"><button class="place-cancel-button" data-geometry-dialog-close="true" type="button">Cancel</button><button class="place-save-button" type="submit">Save drawing</button></footer>
+    </form>
+  </section>
+</div>
+<aside aria-label="Measure options" class="measure-panel" hidden id="measurePanel" role="dialog" aria-modal="false">
+  <header class="measure-panel-header"><div><span class="section-kicker">MAP TOOL</span><h2>Measure</h2></div><button aria-label="Close measure options" class="measure-panel-close" id="closeMeasurePanelBtn" type="button">×</button></header>
+  <div class="measure-panel-body">
+    <label class="measure-field"><span>Measurement</span><select id="measureModeSelect"><option value="distance">Distance</option><option value="area">Area</option></select></label>
+    <label class="measure-field"><span>Units</span><select id="measureUnitSelect"><option value="auto">Automatic</option><option value="metric">Metric</option><option value="imperial">Imperial</option></select></label>
+    <div class="measure-readouts">
+      <div><span>Distance</span><strong id="measureDistanceOutput">—</strong></div>
+      <div><span>Area</span><strong id="measureAreaOutput">—</strong></div>
+    </div>
+    <p class="measure-help" id="measureHelp">Choose a measurement, then start and click the map to add points.</p>
+    <div class="measure-panel-actions">
+      <button class="measure-primary" id="startMeasureBtn" type="button">Start measuring</button>
+      <button class="measure-secondary" id="clearMeasureBtn" type="button" disabled>Clear</button>
+      <button class="measure-secondary" id="finishMeasureBtn" type="button" disabled>Finish</button>
+    </div>
+    <button class="measure-cancel" id="cancelMeasureBtn" type="button">Cancel measurement</button>
+  </div>
+</aside>
+</section>
+</main>
+
+
+
+<div aria-hidden="true" aria-labelledby="workspaceModalTitle" class="workspace-modal" hidden id="workspaceModal" role="dialog" aria-modal="true">
+  <div class="workspace-modal-backdrop" data-workspace-close="true"></div>
+  <section class="workspace-modal-window">
+    <header class="workspace-modal-header">
+      <div class="workspace-modal-title"><span class="workspace-modal-mark" aria-hidden="true">✣</span><div><p>NEELVAAN · WORKSPACE</p><h2 id="workspaceModalTitle">Add Data</h2></div></div>
+      <div class="workspace-modal-header-right"><span class="workspace-modal-hint">Analysis outputs are added to Map Content</span><button aria-label="Close workspace" class="workspace-modal-close" id="workspaceModalClose" title="Close workspace" type="button">×</button></div>
+    </header>
+    <div class="workspace-modal-layout">
+      <div class="workspace-modal-content" id="workspaceModalContent">
+        <section class="panel-view add-data-panel" id="addDataPanel">
+          <div class="tool-panel-heading"><span class="section-kicker">DATA WORKSPACE</span><h2>Add Data</h2><p>Bring vector data into the current map. GeoJSON is supported in this release.</p></div>
+          <div class="add-data-dropzone" id="geojsonDropzone">
+            <div class="add-data-icon">⌁</div><h3>Import GeoJSON</h3><p>Drop a .geojson or .json file here, or browse your device.</p>
+            <input accept=".geojson,.json,application/geo+json,application/json" data-max-size="31457280" hidden id="geojsonFile" type="file"/>
+            <button class="add-data-browse" id="geojsonBrowseBtn" type="button">Browse GeoJSON</button>
+            <small>Maximum file size: 30 MB · Features are rendered on the shared map</small>
+          </div>
+          <div class="add-data-future"><span>SUPPORTED NOW</span><b>GeoJSON</b><span class="future-divider"></span><span>COMING LATER</span><b>Shapefile · KML · CSV · GPKG</b></div>
+          <p aria-live="polite" class="add-data-status" id="geojsonStatus">Imported data layers will appear in Map Content on the left.</p>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
+<div aria-live="polite" class="toast" id="toast" role="status"></div>
+<div class="loading-overlay" hidden="" id="loadingOverlay">
+<div class="loader-card">
+<span class="spinner"></span>
+<b id="loadingTitle">Preparing history…</b>
+<span id="loadingDetail">Please keep this tab open.</span>
+<div class="progress-track"><i id="progressBar"></i></div>
+</div>
+</div>
+<script crossorigin="anonymous" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/proj4@2.11.0/dist/proj4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/geotiff@2.1.3/dist-browser/geotiff.js"></script>
+<script src="raster-core.js"></script>
+<script src="google-config.js"></script>
+<script async defer src="https://accounts.google.com/gsi/client" id="googleIdentityScript"></script>
+<script src="app.js"></script>
+
+<script src="change-detection.js"></script>
+<script src="lst.js"></script>
+</body>
+</html>

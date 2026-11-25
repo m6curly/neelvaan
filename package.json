@@ -1,0 +1,10 @@
+{
+  "name": "neelvaan",
+  "version": "3.5.0",
+  "private": true,
+  "description": "NEELVAAN spatial intelligence and map workspace",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node scripts/check.js"
+  }
+}
